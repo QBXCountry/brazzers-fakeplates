@@ -1,0 +1,7 @@
+{
+    "no_keys": "You don't have keys..",
+    "already_has_plate": "This vehicle already has another plate over this plate",
+    "does_not_have_fakeplate": "This vehicle does not contain any extra plate on it",
+    "attaching_plate": "Attaching Plate",
+    "removing_plate": "Removing Plate"
+}
