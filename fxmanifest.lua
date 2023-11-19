@@ -7,9 +7,8 @@ version "1.0"
 
 lua54 'yes'
 
-modules { 'qbx_core:utils', 'qbx_core:playerdata' }
-shared_scripts { '@ox_lib/init.lua', '@bx_core/import.lua', 'locales/*.lua', 'shared/*.lua' }
-client_scripts { 'client/*.lua' }
+shared_scripts { '@ox_lib/init.lua', '@bx_core/modules/utils.lua', 'locales/*.lua', 'shared/*.lua' }
+client_scripts { '@qbx_core/modules/playerdata.lua', 'client/*.lua' }
 server_scripts { 'server/*.lua', '@oxmysql/lib/MySQL.lua' }
 
 files { 'modules/*.lua' }
