@@ -1,13 +1,13 @@
-local BDc = {}
+local BDs = {}
 
-function BDc.HasKeys(plate)
+function BDs.GiveKeys(source, plate)
     if GetResourceState('qbx_vehiclekeys'):match('started') then
-        exports.qbx_vehiclekeys:HasKeys(plate)
+        TriggerClientEvent('vehiclekeys:client:SetOwner', source, plate)
     elseif GetResourceState('Renewed-Vehiclekeys'):match('started') then
-        exports['Renewed-Vehiclekeys']:hasKey()
+        exports['Renewed-Vehiclekeys']:addKey(source, plate)
     else
         -- Insert your own key here!
     end
 end
 
-return BDc
+return BDs

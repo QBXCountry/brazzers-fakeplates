@@ -1,8 +1,9 @@
-lib.locale()
+local BDs = lib.require('modules.server')
+
 -- Functions
 
 local function GeneratePlate()
-    local plate = RandomNumber(1) .. RandomLetter(2) .. RandomNumber(3) .. RandomLetter(2)
+    local plate = lib.string.random('1AA111AA')
     local result = MySQL.scalar.await('SELECT plate FROM player_vehicles WHERE plate = ?', {plate})
     if result then
         return GeneratePlate()
@@ -49,24 +50,24 @@ RegisterNetEvent('brazzers-fakeplates:server:usePlate', function(vehNetID, vehPl
     if not vehNetID or not vehPlate or not newPlate then return end
     local vehicle = NetworkGetEntityFromNetworkId(vehNetID)
 
-    if isFakePlateOnVehicle(vehPlate) then return exports.qbx_core:Notify(src, locale('already_has_plate'), 'error') end
+    if isFakePlateOnVehicle(vehPlate) then return exports.qbx_core:Notify(src, 'This vehicle already has another plate over this plate', 'error') end
     if not isVehicleOwned(vehPlate) then
-        if not hasKeys then return exports.qbx_core:Notify(src, locale('no_keys'), 'error') end
+        if not hasKeys then return exports.qbx_core:Notify(src, 'You don\'t have keys..', 'error') end
 
         SetVehicleNumberPlateText(vehicle, newPlate)
-        TriggerClientEvent('vehiclekeys:client:SetOwner', src, newPlate)
+        BDs.GiveKeys(src, newPlate)
         exports.ox_inventory:RemoveItem(src, 'fakeplate', 1)
         return
     end
 
     exports.ox_inventory:UpdateVehicle(vehPlate, newPlate)
-    MySQL.update('UPDATE player_vehicles set fakeplate = ? WHERE plate = ?',{newPlate, vehPlate})
+    MySQL.update('UPDATE player_vehicles set fakeplate = ? WHERE plate = ?', { newPlate, vehPlate })
 
     SetVehicleNumberPlateText(vehicle, newPlate)
 
     exports.ox_inventory:RemoveItem(src, 'fakeplate', 1)
     if hasKeys then
-        TriggerClientEvent('vehiclekeys:client:SetOwner', src, newPlate)
+        BDs.GiveKeys(src, newPlate)
     end
 end)
 
@@ -82,13 +83,13 @@ RegisterNetEvent('brazzers-fakeplates:server:removePlate', function(vehNetID, ve
     if not originalPlate then return end
 
     exports.ox_inventory:UpdateVehicle(vehPlate, originalPlate)
-    MySQL.update('UPDATE player_vehicles set fakeplate = ? WHERE plate = ?',{nil, originalPlate})
+    MySQL.update('UPDATE player_vehicles set fakeplate = ? WHERE plate = ?', { nil, originalPlate })
 
     exports.ox_inventory:AddItem(src, 'fakeplate', 1)
 
     SetVehicleNumberPlateText(vehicle, originalPlate)
     if hasKeys then
-        TriggerClientEvent('vehiclekeys:client:SetOwner', src, originalPlate)
+        BDs.GiveKeys(src, originalPlate)
     end
 end)
 
