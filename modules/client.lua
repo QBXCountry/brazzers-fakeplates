@@ -1,12 +1,16 @@
 local BDc = {}
 
-function BDc.HasKeys(plate)
+function BDc.HasKeys(vehicle)
+    if not vehicle then return false end
+    
     if GetResourceState('qbx_vehiclekeys'):match('started') then
-        exports.qbx_vehiclekeys:HasKeys(plate)
+        return exports.qbx_vehiclekeys:HasKeys(vehicle)
     elseif GetResourceState('Renewed-Vehiclekeys'):match('started') then
-        exports['Renewed-Vehiclekeys']:hasKey()
+        return exports['Renewed-Vehiclekeys']:hasKey(vehicle)
     else
-        -- Insert your own key here!
+        -- Fallback logic if neither keysystem is available
+        -- You might want to check if player owns the vehicle or similar
+        return false
     end
 end
 
